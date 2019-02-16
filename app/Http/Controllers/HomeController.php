@@ -38,33 +38,65 @@ class HomeController extends Controller
 //        $this->pre_var_dump($old_data, 'old data', true);
         foreach($old_data as $data){
 
-            $make_id = $this->process_make($data['Boat_Make']);
+            $make_id = $this->process_field($data['Boat_Make'], 'name', 'boat_makes', "\App\BoatMake");
+            $model_id = $this->process_field($data['Boat_Model'], 'name', 'boat_models', "\App\BoatModel", "make_id", $make_id);
+            $data['Unit_Installed'] = ( !empty( $data['Unit_Installed'] ) && strtolower($data['Unit_Installed']) != 'none' ) ? $data['Unit_Installed'] : "unspecified";
+            $thruster_type_id = $this->process_field($data['Unit_Installed'], 'name', 'thruster_types', "\App\ThrusterType");
+            $job_info_id = $this->process_job_info($make_id, $model_id, $thruster_type_id, $data['Boat_Year'], $data['Thruster_Info'], $data['Wiring_Info']);
+
 
         }
         echo "<h1>here</h1>";
         exit;
     }
 
-    protected function process_make($boat_make = ""){
+
+    protected function process_job_info($make_id, $model_id, $thruster_type_id, $boat_year="", $thruster_info="", $wiring_info=""){
+
+        $this->trim_down_strtolower_input($boat_year);
+        $this->keep_only_numbers($boat_year);
+        // store new job
+        $new_job = new \App\JobInfo();
+        $new_job->make_id = $make_id;
+        $new_job->model_id = $model_id;
+        $new_job->year = $boat_year;
+        $new_job->thruster_type_id = $thruster_type_id;
+        $new_job->thruster_info = $thruster_info;
+        $new_job->wiring_info = $wiring_info;
+        $new_job->save();
+        return($new_job->id);
+    }
+
+    protected function keep_only_numbers(&$boat_year){
+        // remove any spaces, characters other than numbers
+        $boat_year = preg_replace('/[^0-9]/', '', $boat_year);
+        $boat_year = !empty($boat_year) ? $boat_year : 0;
+    }
+
+    protected function process_field($var = "", $field, $table, $model, $second_field="", $second_val=""){
 
         // prepare input
-        $this->trim_down_strtolower_input($boat_make);
+        $this->trim_down_strtolower_input($var);
         // determine - is this value stored already?
-        //$b_new_value = $this->is_new_value( $boat_make, 'name', "boat_makes");
+        //$b_new_value = $this->is_new_value( $var, 'name', "boat_makes");
         // TODO: replace below with above
-        $b_new_value = $this->is_new_value( $boat_make, 'name', "boat_makes");
+        $b_new_value = $this->is_new_value( $var, $field, $table);
 
 //        $this->pre_var_dump($b_new_value, 'new val: ', true);
         // try to store if this value does not exist - either way return make_id
         if( $b_new_value ){
-            $new_make = new \App\BoatMake();
-            $new_make->name = $boat_make;
-            $new_make->save();
+            $new_val = new $model();
+            $new_val->$field = $var;
+            if(!empty($second_field)){
+                $new_val->$second_field = $second_val;
+            }
+            $new_val->save();
         } else{
-            $new_make = \App\BoatMake::byName($boat_make);
+            $new_val = $model::byName($var);
         }
-        return($new_make->id);
+        return($new_val->id);
     }
+
 
     protected function is_new_value( $val, $field, $table ){
         $exists = DB::table($table)->select($field)->where($field, '=', $val)->first();

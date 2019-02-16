@@ -91,6 +91,7 @@
                 <div class="links">
                     <a href="/">Home</a>
                     <a href="/transfer">Transfer</a>
+                    <a href="/job/1">test job</a>
                 </div>
                 @yield('contents')
             </div>
