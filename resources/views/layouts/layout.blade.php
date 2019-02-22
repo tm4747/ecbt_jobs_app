@@ -9,7 +9,10 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-
+        <script
+                src="https://code.jquery.com/jquery-3.3.1.min.js"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
 
 
@@ -82,8 +85,8 @@
                     @endauth
                 </div>
             @endif
-
-            <div class="content">
+        <div class="content">
+            <div class="container-fluid" style="width:75%;">
                 <div class="title m-b-md">
                     Jobs app
                 </div>
@@ -91,10 +94,12 @@
                 <div class="links">
                     <a href="/">Home</a>
                     <a href="/transfer">Transfer</a>
-                    <a href="/job/1">test job</a>
+                    <a href="/jobs/">view all jobs</a>
                 </div>
                 @yield('contents')
             </div>
         </div>
+        </div>
+
     </body>
 </html>
