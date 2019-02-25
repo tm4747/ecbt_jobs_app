@@ -7,6 +7,42 @@ use DB;
 
 class JobsController extends Controller
 {
+
+    public function edit(Request $request){
+
+//        echo "<h4>id: $request->job_id</h4>"; exit;
+//        $this_job = \App\JobInfo::byId($request->job_id);
+//        var_dump($this_job); exit;
+
+        $job_info = $this->get_this_job_info($request->job_id);
+
+//        var_dump($job_info); exit;
+
+        return view('jobs.edit', compact('job_info'));
+
+    }
+
+    protected function get_this_job_info($job_id){
+
+        $this_job = \App\JobInfo::byId($job_id);
+        $this_make = \App\BoatMake::byId($this_job->make_id);
+//        var_dump($this_make); exit;
+        $this_model = \App\BoatModel::byId($this_job->model_id);
+        $this_thruster_type = \App\ThrusterType::byId($this_job->thruster_type_id);
+
+        return array(
+            'id' => $job_id,
+            'make' => $this_make->name,
+            'year' => $this_job->year,
+            'model'=> $this_model->name,
+            'thruster_type' => $this_thruster_type->name,
+            'thruster_info' => $this_job->thruster_info,
+            'wiring_info' => $this_job->wiring_info,
+            'done_on' => $this_job->done_on_date
+        );
+    }
+
+
     public function index(Request $request){
 
         $filters= $this->get_filters($request);
@@ -19,18 +55,18 @@ class JobsController extends Controller
         return view('jobs.index', compact('jobs', 'filters', 'boat_makes', 'boat_models', 'boat_years', 'boat_thruster_types'));
     }
 
- public function filter(Request $request){
-
-exit;
-        $filters= $this->get_filters($request);
-        // these will hold all values for filters - are reduced with filter upon filtering
-        $boat_makes = $boat_models = $boat_years = $boat_thruster_types = array();
-        $jobs = $this->get_jobs($filters, $boat_makes, $boat_models, $boat_years, $boat_thruster_types );
-
-//        $this->pre_var_dump($boat_makes, 'jobs', true);
-
-        return view('jobs.index', compact('jobs', 'filters', 'boat_makes', 'boat_models', 'boat_years', 'boat_thruster_types'));
-    }
+// public function filter(Request $request){
+//
+//exit;
+//        $filters= $this->get_filters($request);
+//        // these will hold all values for filters - are reduced with filter upon filtering
+//        $boat_makes = $boat_models = $boat_years = $boat_thruster_types = array();
+//        $jobs = $this->get_jobs($filters, $boat_makes, $boat_models, $boat_years, $boat_thruster_types );
+//
+////        $this->pre_var_dump($boat_makes, 'jobs', true);
+//
+//        return view('jobs.index', compact('jobs', 'filters', 'boat_makes', 'boat_models', 'boat_years', 'boat_thruster_types'));
+//    }
 
     protected function get_filters($request){
         $filters = $make_filters = $model_filters = $year_filters = $thruster_type_filters = array();
@@ -165,13 +201,7 @@ exit;
         return view('jobs.edit', 'id');
 
     }
-    public function edit($id){
 
-        echo "<h4>id: $id</h4>"; exit;
-
-        return view('jobs.edit', 'id');
-
-    }
     public function update($id){
         echo "<h4>id: $id</h4>"; exit;
 

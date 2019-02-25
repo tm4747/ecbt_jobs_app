@@ -206,12 +206,17 @@
         <div class="container jobs_div_container jobs_bg_<?php echo $jobs_count % 2 == 0 ? 'light' : 'dark' ; ?>">
             <div class="row div_job_name_img">
                 <div class="col-sm-2 form-group div_edit_job">
-                    <button id="{{$job['id']}}" class="btn btn-outline-danger form-control btn_job_edit">Edit</button>
                 </div>
                 <div class="col-sm-8 div_job_info">
                     <h4>{{$job['year']}}  {{$job['make']}} {{$job['model']}}</h4>
                 </div>
-                <div class="col-sm-2 form-group div_edit_job">
+                <div class="col-sm-2 form-group div_edit_job" style="display:inline;">
+                    <form method="post" action="/edit">
+                        @csrf
+                        <input type="submit" id="{{$job['id']}}" class="btn btn-outline-danger form-control btn_job_edit" value="Edit">
+                        <input type="hidden" name="job_id" value="{{$job['id']}}">
+                        <input type="hidden" name="edit_job" value="true">
+                    </form>
                 </div>
             </div>
             <div class="row div_job_name_img">
@@ -245,6 +250,11 @@
 
     $(document).ready(function(){
 
+        // Edit job button
+        $('.btn_job_edit').on('click', function(e){
+            // e.preventDefault();
+            alert($(this).attr('id'));
+        });
 
         // Make filter apply
         $('#make_filter_select').on('change', function(){

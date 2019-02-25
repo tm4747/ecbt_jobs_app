@@ -9,4 +9,8 @@ class ThrusterType extends Model
     public static function byName($name){
         return static::where('name', $name)->firstOrFail();
     }
+
+    public static function byId($id){
+        return static::where('id', $id)->firstOrFail();
+    }
 }
