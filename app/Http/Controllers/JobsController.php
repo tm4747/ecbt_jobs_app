@@ -16,7 +16,7 @@ class JobsController extends Controller
 
 //        $this->pre_var_dump($boat_makes, 'jobs', true);
 
-        return view('jobs.index', compact('jobs', 'boat_makes', 'boat_models', 'boat_years', 'boat_thruster_types'));
+        return view('jobs.index', compact('jobs', 'filters', 'boat_makes', 'boat_models', 'boat_years', 'boat_thruster_types'));
     }
 
  public function filter(Request $request){
@@ -29,15 +29,16 @@ exit;
 
 //        $this->pre_var_dump($boat_makes, 'jobs', true);
 
-        return view('jobs.index', compact('jobs', 'boat_makes', 'boat_models', 'boat_years', 'boat_thruster_types'));
+        return view('jobs.index', compact('jobs', 'filters', 'boat_makes', 'boat_models', 'boat_years', 'boat_thruster_types'));
     }
 
     protected function get_filters($request){
         $filters = $make_filters = $model_filters = $year_filters = $thruster_type_filters = array();
         if(!empty($request['make_filter'])){
-            foreach ($request['make_filter'] as $value){
-                $make_filters[] = $value;
-            }
+// ONLY 1 Make request
+            //            foreach ($request['make_filter'] as $value){
+                $make_filters[] = $request['make_filter'];
+//            }
         }
         if(!empty($request['model_filter'])){
             foreach ($request['model_filter'] as $value){
@@ -73,16 +74,10 @@ exit;
 
                 $this_job = array(
                     'id'                => $data->id,
-                    'make'              => array(
-                        'id'                => !empty( $data->make_id ) ? $data->make_id : "",
-                        'name'              => !empty( $this_make_name ) ? $this_make_name : "" ),
-                    'model'             => array(
-                        'id'                => !empty( $data->model_id ) ? $data->model_id : "",
-                        'name'              => !empty( $this_model_name ) ? $this_model_name : "" ),
+                    'make'              => !empty( $this_make_name ) ? $this_make_name : "" ,
+                    'model'             => !empty( $this_model_name ) ? $this_model_name : "" ,
                     'year'              => !empty( $data->year ) ? $data->year : "",
-                    'thruster_type'     => array(
-                        'id'                => !empty( $data->thruster_type_id ) ? $data->thruster_type_id : "",
-                        'name'              => !empty( $this_thruster_type_name ) ? $this_thruster_type_name : "" ),
+                    'thruster_type'     => !empty( $this_thruster_type_name ) ? $this_thruster_type_name : "" ,
                     'wiring_info'       => !empty( $data->wiring_info) ? $data->wiring_info : "",
                     'thruster_info'     => !empty( $data->thruster_info) ? $data->thruster_info : "",
                     'date'              => !empty( $data->done_on_date) ? $data->done_on_date: "",
@@ -93,31 +88,36 @@ exit;
 //                $this->pre_var_dump($filters, 'filters');
                 foreach($filters as $key=>$values){
                     if($key == 'make'){
+//                        echo "<h5>make filter  --- job make: " . $this_job['make']['name']; var_dump( $values );
                         if(!empty($values)){
-                            if(!in_array($this_job['make']['name'], $values)){
-//                                echo "<h2>remove1</h2>";
+                            if(!in_array($this_job['make'], $values)){
+//                                echo "<h6>remove1</h6>";
                                 $b_remove = true;
                             }
                         }
                     } else if($key == 'model'){
+//                        echo "<h5>model filter  --- job model: " . $this_job['model']['name']; var_dump( $values );
+
                         if(!empty($values)){
-                            if(!in_array($this_job['model']['name'], $values)){
+                            if(!in_array($this_job['model'], $values)){
                                 $b_remove = true;
-//                                echo "<h2>remove2</h2>";
+//                                echo "<h6>remove2</h6>";
                             }
                         }
                     } else if($key == 'year'){
+//                        echo "<h5>year filter  --- job year: " . $this_job['year']; var_dump( $values );
+
                         if(!empty($values)){
                             if(!in_array($this_job['year'], $values)){
                                 $b_remove = true;
-//                                echo "<h2>remove3</h2>";
+//                                echo "<h6>remove3</h6>";
                             }
                         }
                     } else if($key == 'thruster_type'){
                         if(!empty($values)){
-                            if(!in_array($this_job['thruster_type']['name'], $values)){
+                            if(!in_array($this_job['thruster_type'], $values)){
                                 $b_remove = true;
-//                                echo "<h2>remove4</h2>";
+//                                echo "<h6>remove4</h6>";
                             }
                         }
                     }
@@ -125,17 +125,17 @@ exit;
                 // IF we've determined not to filter this one out, add to jobs array and filter values
 //                echo "REMOVE: $b_remove";
                 if( $b_remove != true ){
-                    if( !in_array( $this_job['make']['name'], $boat_makes) ){
-                        $boat_makes[] = $this_job['make']['name'];
+                    if( !in_array( $this_job['make'], $boat_makes) ){
+                        $boat_makes[] = $this_job['make'];
                     }
-                    if( !in_array( $this_job['model']['name'], $boat_models) ){
-                        $boat_models[] = $this_job['model']['name'];
+                    if( !in_array( $this_job['model'], $boat_models) ){
+                        $boat_models[] = $this_job['model'];
                     }
                     if( !in_array( $this_job['year'], $boat_years) ){
                         $boat_years[] = $this_job['year'];
                     }
-                    if( !in_array( $this_job['thruster_type']['name'], $boat_thruster_types) ){
-                        $boat_thruster_types[] = $this_job['thruster_type']['name'];
+                    if( !in_array( $this_job['thruster_type'], $boat_thruster_types) ){
+                        $boat_thruster_types[] = $this_job['thruster_type'];
                     }
                     $a_jobs[] = $this_job;
                 }
