@@ -23,7 +23,7 @@
     echo "<h2>edit</h2>";
 //    var_dump($job_info); exit;
 //    $a_all_thruster_types = !empty($a_all_thruster_types) ? $a_all_thruster_types : array( 'b55', 'b75');
-    $job_info['images'] = array('img', 'img', 'img'); ?>
+    $job_info['images'] = !empty( $job_info['images'] ) ? $job_info['images'] :  array('img'); ?>
 
     <div class="container-fluid jobs_div_container jobs_bg_">
         <form method="post" >
@@ -33,6 +33,90 @@
         <div class="row div_job_name_img">
             <div class="col-sm-12 col-xs-12 div_job_info">
                 <h4>{{$job_info['year']}}  {{$job_info['make']}} {{$job_info['model']}}</h4>
+            </div>
+        </div>
+        {{-- MAKE --}}
+        <div class="row">
+            <div class="col-md-6 col-sm-12 col-xs-12 form-group text-justify">
+                <br>
+                <label for="this_make">Make: </label>
+                <select name="make_name" id="this_make" class="form-control">
+                    <option value="">Unknown</option>
+                    @foreach($a_all_makes as $make)
+                        <option value="{{$make}}" <?php echo ( $make == $job_info['make'] ) ? 'selected="selected"' : ""; ?> >{{$make}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="offset-md-3 col-md-3 col-sm-12 col-xs-12 form-group div_edit_job" style="display:inline;">
+
+                <?php $handle = !empty($job_info['id']) ? "Update" : "Save"; ?>
+                <input type="submit" id="{{$job_info['id']}}" class="btn btn-outline-danger form-control btn_job_edit" value="{{$handle}} Job info">
+                <input type="hidden" name="job_id" value="{{$job_info['id']}}">
+                <input type="hidden" name="edit_job" value="true">
+            </div>
+        </div>
+        <div class="row" id="div_add_new_make">
+            <div class="col-md-6 col-sm-12 col-xs-12 form-group text-justify" >
+                <button class="btn btn-outline-primary form-control" id="btn_add_new_make" value="New Make">Add New Make</button>
+            </div>
+        </div>
+        {{--ADD NEW MAKE--}}
+        <div class="row" style="display:none" id="div_this_new_make">
+            <div class="col-md-6 col-sm-12 col-xs-12 form-group text-justify">
+                <button class="btn btn-outline-danger form-control" id="btn_hide_add_new_make" value="Hide New Make">Hide - Add New Make</button>
+                <br><br>
+                <label for="this_new_make">New Make: </label><br>
+                <input class="form-control" type="text" id="this_new_make" name="new_make">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <hr>
+            </div>
+        </div>
+        {{-- MODEL --}}
+        <div class="row">
+            <div class="col-md-6 col-sm-12 col-xs-12 form-group text-justify">
+                <br>
+                <label for="this_model">Model: </label>
+                <select name="model_name" id="this_model" class="form-control">
+                    <option value="">Unknown</option>
+                    @foreach($a_all_models as $model)
+                        <option value="{{$model}}" <?php echo ( $model == $job_info['model'] ) ? 'selected="selected"' : ""; ?> >{{$model}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="row" id="div_add_new_model">
+            <div class="col-md-6 col-sm-12 col-xs-12 form-group text-justify" >
+                <button class="btn btn-outline-primary form-control" id="btn_add_new_model" value="New model">Add New Model</button>
+            </div>
+        </div>
+        {{--ADD NEW model--}}
+        <div class="row" style="display:none" id="div_this_new_model">
+            <div class="col-md-6 col-sm-12 col-xs-12 form-group text-justify">
+                <button class="btn btn-outline-danger form-control" id="btn_hide_add_new_model" value="Hide New model">Hide - Add New Model</button>
+                <br><br>
+                <label for="this_new_model">New Model: </label><br>
+                <input class="form-control" type="text" id="this_new_model" name="new_model">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <hr>
+            </div>
+        </div>
+        {{--YEAR    --}}
+        <div class="row">
+            <div class="col-md-6 col-sm-12 col-xs-12 form-group text-justify">
+                <label for="this_boat_year">Boat Year: </label>
+                <input id="this_boat_year" name="date_installed" type="number" class="form-control " value="{{$job_info['year']}}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <hr>
             </div>
         </div>
         {{--EDIT SHORT FIELDS - THRUSTER INSTALLED, --}}
@@ -46,13 +130,6 @@
                         <option value="{{$thruster['id']}}" <?php echo ( $thruster['name'] == $job_info['thruster_type'] ) ? 'selected="selected"' : ""; ?> >{{$thruster['name']}}</option>
                     @endforeach
                 </select>
-            </div>
-            <div class="offset-md-3 col-md-3 col-sm-12 col-xs-12 form-group div_edit_job" style="display:inline;">
-
-                <?php $handle = !empty($job_info['id']) ? "Update" : "Save"; ?>
-                <input type="submit" id="{{$job_info['id']}}" class="btn btn-outline-danger form-control btn_job_edit" value="{{$handle}} Job info">
-                <input type="hidden" name="job_id" value="{{$job_info['id']}}">
-                <input type="hidden" name="edit_job" value="true">
             </div>
         </div>
         <div class="row" id="div_add_new_thruster_type">
@@ -115,13 +192,27 @@
         </form>
 
         {{--IMAGES    --}}
-        <div class="row div_job_name_img">
-            @foreach($job_info['images'] as $image)
-                <div class="col-sm-4 div_job_info">
-                    {{$image}}
+        <form method="post" id="form_images" enctype="multipart/form-data" >
+            @csrf
+            @method('PATCH')
+            <div class="row">
+                <div class="col-md-6 col-sm-12 form-group">
+                    <input type="file" name="filenames[]" id="input_file_upload" class="form-control" multiple="multiple">
                 </div>
-            @endforeach
-        </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12 form-group">
+                    <input type="submit" class="btn btn-primary form-control" id="btn_upload_images" value="Upload Images">
+                </div>
+            </div>
+            <div class="row div_job_name_img">
+                @foreach($job_info['images'] as $image)
+                    <div class="col-sm-4 div_job_info">
+                        <img src="{{ URL::to( '/images/'. $image['path'] )}}" width="200px">
+                    </div>
+                @endforeach
+            </div>
+        </form>
 
     </div>
 
@@ -133,6 +224,13 @@
     $( function() {
         $( "#this_date_installed" ).datepicker();
     } );
+
+    $('#btn_upload_images').on('click', function(e){
+        e.preventDefault();
+        if( $('#input_file_upload').val() !== undefined && $('#input_file_upload').val() !== "" && $('#input_file_upload').val() !== null ){
+            $('#form_images').submit();
+        }
+    });
 
     $( "#this_date_installed" ).datepicker({ dateFormat: 'yy-mm-dd' });
 
@@ -148,6 +246,34 @@
             // alert('click');
             $('#div_add_new_thruster_type').toggle();
             $('#div_this_new_thruster_type').toggle();
+            return false;
+        });
+
+        // handle new make
+        $('#btn_add_new_make').on('click', function(){
+            // alert('click');
+            $('#div_add_new_make').toggle();
+            $('#div_this_new_make').toggle();
+            return false;
+        });
+        $('#btn_hide_add_new_make').on('click', function(){
+            // alert('click');
+            $('#div_add_new_make').toggle();
+            $('#div_this_new_make').toggle();
+            return false;
+        });
+
+        // handle new model
+        $('#btn_add_new_model').on('click', function(){
+            // alert('click');
+            $('#div_add_new_model').toggle();
+            $('#div_this_new_model').toggle();
+            return false;
+        });
+        $('#btn_hide_add_new_model').on('click', function(){
+            // alert('click');
+            $('#div_add_new_model').toggle();
+            $('#div_this_new_model').toggle();
             return false;
         });
 
