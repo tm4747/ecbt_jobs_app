@@ -8,18 +8,100 @@ use DB;
 class JobsController extends Controller
 {
 
-    public function edit(Request $request){
+    public function edit($id, Request $request){
+
+
 
 //        echo "<h4>id: $request->job_id</h4>"; exit;
+
 //        $this_job = \App\JobInfo::byId($request->job_id);
 //        var_dump($this_job); exit;
 
-        $job_info = $this->get_this_job_info($request->job_id);
+        $job_info = $this->get_this_job_info($id);
+        $a_all_thruster_types = $this->get_all_thruster_types();
 
-//        var_dump($job_info); exit;
+//                $this->pre_var_dump($a_all_thruster_types, 'job info', true);
 
-        return view('jobs.edit', compact('job_info'));
 
+        return view('jobs.edit', compact('job_info', 'a_all_thruster_types'));
+
+    }
+
+
+    public function update($id, Request $request){
+//        echo "<h4>id: $id</h4>"; exit;
+
+        $this->save_job_info($id, $request);
+
+        $job_info = $this->get_this_job_info($id);
+        $a_all_thruster_types = $this->get_all_thruster_types();
+
+        return view('jobs.edit', compact('job_info', 'a_all_thruster_types'));
+
+    }
+
+    protected function save_job_info($id = "", $request){
+
+        echo $id;
+        if(!empty($id)){
+            $this_job = \App\JobInfo::byId($id);
+            echo "<h4>update job</h4>";
+        } else {
+            $this_job = new \App\JobInfo();
+            echo "<h4>create new job</h4>";
+        }
+        // HANDLE SAVE / UPDATE MAKE
+        if(!empty($request->make_name)){
+            $this_make = \App\BoatMake::byName($request->make_name);
+            $make_id = $this_make->id;
+            $this_job->make_id = $make_id;
+        }
+        // HANDLE SAVE / UPDATE MODEL
+        if(!empty($request->model_name)){
+            $this_model = \App\BoatModel::byName($request->model_name);
+            $model_id = $this_model->id;
+            $this_job->model_id = $model_id;
+        }
+        // HANDLE SAVE / UPDATE BOAT YEAR
+        if(!empty($request->year)){
+            $this_job->year = $request->year;
+        }
+        // HANDLE SAVE / UPDATE THRUSTER TYPE
+        $thruster_id = "";
+        if(!empty($request->new_thruster_type)){
+            $thruster_type = new \App\ThrusterType();
+            $thruster_type->name = $request->new_thruster_type;
+            $thruster_type->save();
+            $thruster_id = $thruster_type->id;
+        } else if( !empty( $request->thruster_installed ) ){
+            $thruster_id = $request->thruster_installed;
+        }
+        $this_job->thruster_type_id = $thruster_id;
+        // HANDLE SAVE / UPDATE WIRING INFO
+        if(!empty($request->wiring_info)){
+            $this_job->wiring_info = $request->wiring_info;
+        }
+        // HANDLE SAVE / UPDATE THRUSTER INFO
+        if(!empty($request->thruster_info)){
+            $this_job->thruster_info = $request->thruster_info;
+        }
+        // HANDLE SAVE / UPDATE DATE INSTALLED
+        if(!empty($request->date_installed)){
+            $this_job->done_on_date = $request->date_installed;
+        }
+        $this_job->save();
+    }
+
+    protected function get_all_thruster_types(){
+        $a_all_thruster_types = array();
+        $a_all_thruster_types_data = DB::table('thruster_types')->orderBy('name')->get();
+        foreach($a_all_thruster_types_data as $thruster_types){
+            $a_all_thruster_types[] = array(
+              'name' =>   $thruster_types->name,
+                'id' => $thruster_types->id
+            );
+        }
+        return $a_all_thruster_types;
     }
 
     protected function get_this_job_info($job_id){
@@ -30,7 +112,7 @@ class JobsController extends Controller
         $this_model = \App\BoatModel::byId($this_job->model_id);
         $this_thruster_type = \App\ThrusterType::byId($this_job->thruster_type_id);
 
-        return array(
+        $a_all_job_info = array(
             'id' => $job_id,
             'make' => $this_make->name,
             'year' => $this_job->year,
@@ -40,6 +122,10 @@ class JobsController extends Controller
             'wiring_info' => $this_job->wiring_info,
             'done_on' => $this_job->done_on_date
         );
+
+//        $this->pre_var_dump($a_all_job_info, 'job info', true);
+
+        return $a_all_job_info;
     }
 
 
@@ -202,10 +288,5 @@ class JobsController extends Controller
 
     }
 
-    public function update($id){
-        echo "<h4>id: $id</h4>"; exit;
 
-        return view('jobs.edit', 'id');
-
-    }
 }

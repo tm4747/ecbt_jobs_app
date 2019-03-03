@@ -211,7 +211,7 @@
                     <h4>{{$job['year']}}  {{$job['make']}} {{$job['model']}}</h4>
                 </div>
                 <div class="col-sm-2 form-group div_edit_job" style="display:inline;">
-                    <form method="post" action="/edit">
+                    <form method="post" action="/edit/{{$job['id']}}">
                         @csrf
                         <input type="submit" id="{{$job['id']}}" class="btn btn-outline-danger form-control btn_job_edit" value="Edit">
                         <input type="hidden" name="job_id" value="{{$job['id']}}">
@@ -238,6 +238,14 @@
                 </div>
             </div>
         </div>
+        {{--EMPTY LINE--}}
+        <div class="container ">
+            <div class="row ">
+                <div class="col-sm-12">
+                    <hr style = "color:#f1f1f1">
+                </div>
+            </div>
+        </div>
         <?php $jobs_count++; ?>
     @endforeach
 
@@ -253,7 +261,7 @@
         // Edit job button
         $('.btn_job_edit').on('click', function(e){
             // e.preventDefault();
-            alert($(this).attr('id'));
+            // alert($(this).attr('id'));
         });
 
         // Make filter apply

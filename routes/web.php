@@ -15,7 +15,13 @@ Route::get('/jobs/create/', 'JobsController@create');
 //Route::view('/job/{$id}', 'jobs.show');
 // Route::get('/job/{$id}', 'function e(){ echo "<h3>something</h3>"; exit; }');
 Route::get('/jobs/show/{$id}', 'JobsController@show');
-Route::post('/edit', 'JobsController@edit');
+
+/*** EDIT JOBS ***/
+Route::post('/edit/{id}', 'JobsController@edit');
+Route::patch('/edit/{id}', 'JobsController@update');
+
+
+
 
 Route::patch('/job/edit/{$id}', 'JobsController@update');
 
