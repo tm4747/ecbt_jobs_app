@@ -18,9 +18,19 @@ class JobsController extends Controller
         $boat_makes = $boat_models = $boat_years = $boat_thruster_types = array();
         $jobs = $this->get_jobs($filters, $boat_makes, $boat_models, $boat_years, $boat_thruster_types );
 
-//        $this->pre_var_dump($boat_makes, 'jobs', true);
-
         return view('jobs.index', compact('jobs', 'filters', 'boat_makes', 'boat_models', 'boat_years', 'boat_thruster_types'));
+    }
+
+    public function view($id, Request $request){
+
+        $job_info = $this->get_this_job_info($id);
+        $a_all_thruster_types = $this->get_all_thruster_types();
+
+        $a_all_makes = $this->get_all_makes();
+
+        $a_all_models = $this->get_all_models_per_make( $job_info['make_id'] );
+
+        return view('jobs.view', compact('job_info', 'a_all_thruster_types', 'a_all_models', 'a_all_makes'));
     }
 
 
@@ -29,7 +39,7 @@ class JobsController extends Controller
         $job_info = $this->get_empty_job_info();
         $a_all_makes = $this->get_all_makes();
         $a_all_models = array();
-
+        $a_all_thruster_types = $this->get_all_thruster_types();
 
         return view('jobs.edit', compact('job_info', 'a_all_thruster_types', 'a_all_makes', 'a_all_models'));
     }
@@ -40,6 +50,7 @@ class JobsController extends Controller
         foreach($makes_data as $data){
             $a_all_makes[] = $data->name;
         }
+        sort($a_all_makes);
         return $a_all_makes;
     }
 
@@ -58,11 +69,16 @@ class JobsController extends Controller
     }
 
 
+    public function store( Request $request){
+        $id = $this->save_job_info("", $request);
 
+        $job_info = $this->get_this_job_info($id);
 
-    public function store( $id ){
+        $a_all_makes = $this->get_all_makes();
+        $a_all_models = $this->get_all_models_per_make( $job_info['make_id'] );
+        $a_all_thruster_types = $this->get_all_thruster_types();
 
-        return view('jobs.edit', compact('job_info', 'a_all_thruster_types'));
+        return view('jobs.edit', compact('job_info', 'a_all_thruster_types', 'a_all_makes', 'a_all_models'));
 
     }
 
@@ -85,32 +101,37 @@ class JobsController extends Controller
         foreach($models_data as $model){
             $a_models[] = $model->name;
         }
+        sort($a_models);
+
         return $a_models;
     }
 
 
     public function update($id, Request $request){
 
-                if($request->hasfile('filenames')){
+        if($request->hasfile('filenames')){
 
-                    foreach($request->file('filenames') as $image)
-                    {
-                        $this->pre_var_dump($image);
-                        $name=$image->getClientOriginalName();
-                        $image->move(public_path().'/images/' . $id, $name);
-                        $new_image = new \App\Image();
-                        $new_image->job_info_id = $id;
-                        $new_image->image_path = "$id/$name";
-                        $new_image->save();
-                    }
+            foreach($request->file('filenames') as $image) {
+                $this->pre_var_dump($image);
+                $name=$image->getClientOriginalName();
+                $image->move(public_path().'/images/' . $id, $name);
+                $new_image = new \App\Image();
+                $new_image->job_info_id = $id;
+                $new_image->image_path = "$id/$name";
+                $new_image->save();
+            }
         } else {
             $this->save_job_info($id, $request);
         }
 
         $job_info = $this->get_this_job_info($id);
+
+        $a_all_makes = $this->get_all_makes();
+        $a_all_models = $this->get_all_models_per_make( $job_info['make_id'] );
+
         $a_all_thruster_types = $this->get_all_thruster_types();
 
-        return view('jobs.edit', compact('job_info', 'a_all_thruster_types'));
+        return view('jobs.edit', compact('job_info', 'a_all_thruster_types', 'a_all_makes', 'a_all_models'));
 
     }
     /**************** WEB FUNCTIONS END *********************/
@@ -120,8 +141,6 @@ class JobsController extends Controller
 
 
     /**************** AUX FUNCTION BEGIN *********************/
-
-
     protected function save_job_info($id = "", $request){
 
         echo $id;
@@ -133,21 +152,30 @@ class JobsController extends Controller
             echo "<h4>create new job</h4>";
         }
         // HANDLE SAVE / UPDATE MAKE
-        if(!empty($request->make_name)){
+        if(!empty($request->new_make)){
+            $new_make = new \App\BoatMake();
+            $new_make->name = $request->new_make;
+            $new_make->save();
+            $this_job->make_id = $new_make->id;
+        } elseif(!empty($request->make_name)){
             $this_make = \App\BoatMake::byName($request->make_name);
             $make_id = $this_make->id;
             $this_job->make_id = $make_id;
         }
         // HANDLE SAVE / UPDATE MODEL
-        if(!empty($request->model_name)){
+        if(!empty($request->new_model) && !empty($this_job->make_id) ){
+            $new_model = new \App\BoatModel();
+            $new_model->name = $request->new_model;
+            $new_model->make_id = $this_job->make_id;
+            $new_model->save();
+            $this_job->model_id = $new_model->id;
+        } else if(!empty($request->model_name)){
             $this_model = \App\BoatModel::byName($request->model_name);
             $model_id = $this_model->id;
             $this_job->model_id = $model_id;
         }
         // HANDLE SAVE / UPDATE BOAT YEAR
-        if(!empty($request->year)){
-            $this_job->year = $request->year;
-        }
+        $this_job->year = !empty($request->boat_year) ? $request->boat_year : "0";
         // HANDLE SAVE / UPDATE THRUSTER TYPE
         $thruster_id = "";
         if(!empty($request->new_thruster_type)){
@@ -158,20 +186,17 @@ class JobsController extends Controller
         } else if( !empty( $request->thruster_installed ) ){
             $thruster_id = $request->thruster_installed;
         }
-        $this_job->thruster_type_id = $thruster_id;
+        if(!empty($thruster_id)){
+            $this_job->thruster_type_id = $thruster_id;
+        }
         // HANDLE SAVE / UPDATE WIRING INFO
-        if(!empty($request->wiring_info)){
-            $this_job->wiring_info = $request->wiring_info;
-        }
+        $this_job->wiring_info = !empty($request->wiring_info) ? $request->wiring_info : "";
         // HANDLE SAVE / UPDATE THRUSTER INFO
-        if(!empty($request->thruster_info)){
-            $this_job->thruster_info = $request->thruster_info;
-        }
+        $this_job->thruster_info = !empty($request->thruster_info) ? $request->thruster_info : "";
         // HANDLE SAVE / UPDATE DATE INSTALLED
-        if(!empty($request->date_installed)){
-            $this_job->done_on_date = $request->date_installed;
-        }
+        $this_job->done_on_date = !empty($request->date_installed) ? $request->date_installed : null;
         $this_job->save();
+        return $this_job->id;
     }
 
 
@@ -185,6 +210,7 @@ class JobsController extends Controller
                 'id' => $thruster_types->id
             );
         }
+        sort($a_all_thruster_types);
         return $a_all_thruster_types;
     }
 
@@ -195,8 +221,12 @@ class JobsController extends Controller
         $this_job = \App\JobInfo::byId($job_id);
         $this_make = \App\BoatMake::byId($this_job->make_id);
 //        var_dump($this_make); exit;
-        $this_model = \App\BoatModel::byId($this_job->model_id);
-        $this_thruster_type = \App\ThrusterType::byId($this_job->thruster_type_id);
+        if(!empty($this_job->model_id) ){
+            $this_model = \App\BoatModel::byId($this_job->model_id);
+        }
+        if(!empty($this_job->thruster_type_id) ){
+            $this_thruster_type = \App\ThrusterType::byId($this_job->thruster_type_id);
+        }
 
         $images = array();
         $image_data = DB::table('images')->where('job_info_id', $job_id)->get();
@@ -208,21 +238,18 @@ class JobsController extends Controller
             );
         }
 
-
         $a_all_job_info = array(
             'id' => $job_id,
             'make_id' => $this_job->make_id,
             'make' => $this_make->name,
-            'year' => $this_job->year,
-            'model'=> $this_model->name,
-            'thruster_type' => $this_thruster_type->name,
+            'year' => !empty( $this_job->year ) ? $this_job->year : 0,
+            'model'=> !empty( $this_model->name ) ? $this_model->name : null,
+            'thruster_type' => !empty( $this_thruster_type->name ) ? $this_thruster_type->name : null,
             'thruster_info' => $this_job->thruster_info,
             'wiring_info' => $this_job->wiring_info,
             'done_on' => $this_job->done_on_date,
             'images' => $images
         );
-
-//        $this->pre_var_dump($a_all_job_info, 'job info', true);
 
         return $a_all_job_info;
     }
@@ -267,6 +294,12 @@ class JobsController extends Controller
                 $this_model_name = DB::table('boat_models')->where('id', $data->model_id)->pluck('name')->first();
                 $this_thruster_type_name = DB::table('thruster_types')->where('id', $data->thruster_type_id)->pluck('name')->first();
 
+                // get number of images
+//                $count_images = 0;
+//                $images = array();
+                $image_data = DB::table('images')->where('job_info_id', $data->id)->get();
+                $count_images = count($image_data);
+
                 $this_job = array(
                     'id'                => $data->id,
                     'make'              => !empty( $this_make_name ) ? $this_make_name : "" ,
@@ -276,14 +309,12 @@ class JobsController extends Controller
                     'wiring_info'       => !empty( $data->wiring_info) ? $data->wiring_info : "",
                     'thruster_info'     => !empty( $data->thruster_info) ? $data->thruster_info : "",
                     'date'              => !empty( $data->done_on_date) ? $data->done_on_date: "",
+                    'count_images'        => $count_images
                 );
-//                $this->pre_var_dump($this_job, 'thisjob');
                 // APPLY FILTERS
                 $b_remove = false;
-//                $this->pre_var_dump($filters, 'filters');
                 foreach($filters as $key=>$values){
                     if($key == 'make'){
-//                        echo "<h5>make filter  --- job make: " . $this_job['make']['name']; var_dump( $values );
                         if(!empty($values)){
                             if(!in_array($this_job['make'], $values)){
 //                                echo "<h6>remove1</h6>";
@@ -291,34 +322,28 @@ class JobsController extends Controller
                             }
                         }
                     } else if($key == 'model'){
-//                        echo "<h5>model filter  --- job model: " . $this_job['model']['name']; var_dump( $values );
 
                         if(!empty($values)){
                             if(!in_array($this_job['model'], $values)){
                                 $b_remove = true;
-//                                echo "<h6>remove2</h6>";
                             }
                         }
                     } else if($key == 'year'){
-//                        echo "<h5>year filter  --- job year: " . $this_job['year']; var_dump( $values );
 
                         if(!empty($values)){
                             if(!in_array($this_job['year'], $values)){
                                 $b_remove = true;
-//                                echo "<h6>remove3</h6>";
                             }
                         }
                     } else if($key == 'thruster_type'){
                         if(!empty($values)){
                             if(!in_array($this_job['thruster_type'], $values)){
                                 $b_remove = true;
-//                                echo "<h6>remove4</h6>";
                             }
                         }
                     }
                 }
                 // IF we've determined not to filter this one out, add to jobs array and filter values
-//                echo "REMOVE: $b_remove";
                 if( $b_remove != true ){
                     if( !in_array( $this_job['make'], $boat_makes) ){
                         $boat_makes[] = $this_job['make'];
@@ -336,8 +361,10 @@ class JobsController extends Controller
                 }
             }
         }
-//        $this->pre_var_dump($a_jobs, 'jobs', true);
-
+        sort($boat_makes);
+        sort($boat_models);
+        sort($boat_years);
+        sort($boat_thruster_types);
         return $a_jobs;
     }
 
@@ -351,7 +378,5 @@ class JobsController extends Controller
             exit;
         }
     }
-
-
 
 }

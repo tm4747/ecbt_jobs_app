@@ -65,6 +65,12 @@
             margin-top:auto;
             margin-bottom:auto;
         }
+        textarea{
+            color:black;
+        }
+        body{
+            color:black;
+        }
     </style>
 
     <?php //var_dump($filters); ?>
@@ -202,15 +208,22 @@
 
 <?php $jobs_count = 0 ?>
     @foreach($jobs as $job)
-        <?php $job['images'] = array('img', 'img', 'img'); ?>
         <div class="container jobs_div_container jobs_bg_<?php echo $jobs_count % 2 == 0 ? 'light' : 'dark' ; ?>">
             <div class="row div_job_name_img">
-                <div class="col-sm-2 form-group div_edit_job">
-                </div>
-                <div class="col-sm-8 div_job_info">
+                <div class="col-sm-12 div_job_info">
                     <h4>{{$job['year']}}  {{$job['make']}} {{$job['model']}}</h4>
                 </div>
-                <div class="col-sm-2 form-group div_edit_job" style="display:inline;">
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12 form-group div_edit_job" style="display:inline;">
+                    <form method="post" action="/view/{{$job['id']}}">
+                        @csrf
+                        <input type="submit" id="{{$job['id']}}" class="btn btn-outline-primary form-control btn_job_edit" value="View">
+                        <input type="hidden" name="job_id" value="{{$job['id']}}">
+                        <input type="hidden" name="edit_job" value="true">
+                    </form>
+                </div>
+                <div class="col-md-6 col-sm-12 form-group div_edit_job" style="display:inline;">
                     <form method="post" action="/edit/{{$job['id']}}">
                         @csrf
                         <input type="submit" id="{{$job['id']}}" class="btn btn-outline-danger form-control btn_job_edit" value="Edit">
@@ -220,11 +233,7 @@
                 </div>
             </div>
             <div class="row div_job_name_img">
-                @foreach($job['images'] as $image)
-                    <div class="col-sm-4 div_job_info">
-                        {{$image}}
-                    </div>
-                @endforeach
+                <h4>Images: {{$job['count_images']}}</h4>
             </div>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 div_job_info div_thruster_info text-justify">

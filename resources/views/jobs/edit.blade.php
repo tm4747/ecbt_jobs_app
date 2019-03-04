@@ -20,13 +20,20 @@
 
     <?php
 
-    echo "<h2>edit</h2>";
-//    var_dump($job_info); exit;
+    echo "<h2>edit job</h2>";
+
+//        var_dump($job_info); exit;
 //    $a_all_thruster_types = !empty($a_all_thruster_types) ? $a_all_thruster_types : array( 'b55', 'b75');
-    $job_info['images'] = !empty( $job_info['images'] ) ? $job_info['images'] :  array('img'); ?>
+    $job_info['images'] = !empty( $job_info['images'] ) ? $job_info['images'] :  array( array('id'=>"", 'path'=>"")); ?>
 
     <div class="container-fluid jobs_div_container jobs_bg_">
-        <form method="post" >
+        <div style="display:none;">
+            <form id="form_create_job_info" method="post">
+                @csrf
+                <input id="new_job_make" name="make_name">
+            </form>
+        </div>
+        <form method="post" id="form_main" action="/edit/{{$job_info['id']}}">
             @csrf
             @method('PATCH')
         {{--TOP ROW - BOAT YEAR MAKE MODEL AND UPDATE BUTTON--}}
@@ -107,11 +114,11 @@
                 <hr>
             </div>
         </div>
-        {{--YEAR    --}}
+        {{-- BOAT YEAR    --}}
         <div class="row">
             <div class="col-md-6 col-sm-12 col-xs-12 form-group text-justify">
                 <label for="this_boat_year">Boat Year: </label>
-                <input id="this_boat_year" name="date_installed" type="number" class="form-control " value="{{$job_info['year']}}">
+                <input id="this_boat_year" name="boat_year" type="number" class="form-control " value="{{$job_info['year']}}">
             </div>
         </div>
         <div class="row">
@@ -192,11 +199,11 @@
         </form>
 
         {{--IMAGES    --}}
-        <form method="post" id="form_images" enctype="multipart/form-data" >
+        <form method="post" id="form_images" action="/edit/{{$job_info['id']}}" enctype="multipart/form-data" >
             @csrf
             @method('PATCH')
             <div class="row">
-                <div class="col-md-6 col-sm-12 form-group">
+                <div class="col-md-6 col-sm-12 form-group ">
                     <input type="file" name="filenames[]" id="input_file_upload" class="form-control" multiple="multiple">
                 </div>
             </div>
@@ -235,6 +242,15 @@
     $( "#this_date_installed" ).datepicker({ dateFormat: 'yy-mm-dd' });
 
     $(document).ready(function(){
+
+        // on change - make select
+        $('#this_make').on('change', function(){
+            $('#new_job_make').val($('#this_make').val());
+            alert( $('#new_job_make').val() );
+            $('#form_create_job_info').submit();
+        });
+
+
         // alert('something');
         $('#btn_add_new_thruster_type').on('click', function(){
             // alert('click');

@@ -58,7 +58,7 @@
             }
 
             .title {
-                font-size: 84px;
+                font-size: 3em;
             }
 
             .links > a {
@@ -143,6 +143,9 @@
             .jobs_div_container{
                 padding-top:1em;
             }
+            .menu_links{
+                font-size: 1.5em;
+            }
         </style>
     </head>
     <body>
@@ -166,10 +169,21 @@
                     ECBT Jobs
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 form-group menu_links links">
+                        {{--<a href="/" ><button class="btn btn-outline-primary form-control">View Jobs</button></a>--}}
+                        <a href="/jobs/" ><span class="menu_links force_same_line">view all jobs</span></a>
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-group menu_links links">
+                        {{--<a href="/create/" ><span class="btn btn-outline-primary form-control">Enter New Job</span></a>--}}
+                        <a href="/create/" ><span class="menu_links force_same_line">Enter New Job</span></a>
+                    </div>
+                </div>
                 <div class="links">
-                    <a href="/">Home</a>
-                    <a href="/transfer">Transfer</a>
-                    <a href="/jobs/">view all jobs</a>
+
+
+
+                    <hr>
                 </div>
             </div>
 

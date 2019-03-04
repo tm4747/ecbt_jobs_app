@@ -17,8 +17,8 @@ class CreateJobInfosTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->integer('make_id');
-            $table->integer('model_id');
-            $table->integer('year')->nullable();
+            $table->integer('model_id')->nullable();
+            $table->integer('year')->default(0);
             $table->integer('thruster_type_id')->nullable();
             $table->text('wiring_info')->nullable();
             $table->text('thruster_info')->nullable();
