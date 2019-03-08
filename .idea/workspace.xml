@@ -2,22 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="46f74774-3720-47cb-b7c7-33b8b44adaf8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/JobsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/JobsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/141451.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/141451.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/180629.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/180629.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/22/598378.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/22/598378.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/24/9b8c41aaa17ecb6c5d944b5a1656b874.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/24/9b8c41aaa17ecb6c5d944b5a1656b874.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/24/AYvP9XQ.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/24/AYvP9XQ.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/24/images.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/24/images.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/24_/141451.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/24_/141451.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/24_/180629.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/24_/180629.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/24_/598378.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/24_/598378.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/24_/AYvP9XQ.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/24_/AYvP9XQ.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/372/Alien-Planet-Desktop-Wallpaper-HD-Free.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/372/Alien-Planet-Desktop-Wallpaper-HD-Free.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/598378.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/598378.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/jobs/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/jobs/edit.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/jobs/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/jobs/index.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,14 +17,23 @@
     <splitter split-orientation="vertical" split-proportion="0.5">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/app/Http/Controllers/JobsController.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="38">
+                <state relative-caret-position="3645">
                   <caret line="249" lean-forward="true" selection-start-line="249" selection-end-line="249" />
                   <folding>
                     <element signature="e#40#68#0#PHP" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/resources/views/jobs/index.blade.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="255">
+                  <caret line="77" column="26" selection-start-line="77" selection-start-column="26" selection-end-line="77" selection-end-column="26" />
                 </state>
               </provider>
             </entry>
@@ -59,26 +53,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/resources/views/jobs/view.blade.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="220">
+                <state relative-caret-position="1120">
                   <caret line="86" selection-start-line="86" selection-end-line="86" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/database/migrations/2019_02_16_045722_create_images_table.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="120">
-                  <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="19" selection-end-column="41" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_08_003949_create_deleted_images_table.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="225">
-                  <caret line="17" column="33" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
                 </state>
               </provider>
             </entry>
@@ -186,7 +162,6 @@
         <option value="$PROJECT_DIR$/resources/views/jobs/view.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/layout.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/jobs/view.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/jobs/index.blade.php" />
         <option value="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" />
         <option value="$PROJECT_DIR$/app/Exceptions/Handler.php" />
         <option value="$PROJECT_DIR$/.htaccess" />
@@ -195,6 +170,7 @@
         <option value="$PROJECT_DIR$/database/migrations/2019_03_08_003949_create_deleted_images_table.php" />
         <option value="$PROJECT_DIR$/resources/views/jobs/edit.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/JobsController.php" />
+        <option value="$PROJECT_DIR$/resources/views/jobs/index.blade.php" />
       </list>
     </option>
   </component>
@@ -346,6 +322,24 @@
             <path>
               <item name="proj1" type="b2602c69:ProjectViewProjectNode" />
               <item name="proj1" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proj1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proj1" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proj1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proj1" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="jobs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proj1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proj1" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -396,18 +390,18 @@
       <workItem from="1551645565929" duration="17242000" />
       <workItem from="1551673636885" duration="785000" />
       <workItem from="1551677391779" duration="2795000" />
-      <workItem from="1551850248396" duration="4656000" />
+      <workItem from="1551850248396" duration="5669000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="96192000" />
+    <option name="totallyTimeSpent" value="97205000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="320" y="484" width="2226" height="1329" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23027523" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23027523" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -420,7 +414,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.22083333" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.22083333" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -565,13 +559,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/jobs/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="975">
-          <caret line="65" column="31" selection-start-line="65" selection-start-column="31" selection-end-line="65" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_02_15_173836_create_thruster_types_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -596,13 +583,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/jobs/view.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="86" selection-start-line="86" selection-end-line="86" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_02_16_045722_create_images_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -619,21 +599,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/jobs/edit.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="261" selection-start-line="261" selection-end-line="261" />
+        <state relative-caret-position="550">
+          <caret line="215" lean-forward="true" selection-start-line="215" selection-end-line="215" />
           <folding>
-            <element signature="e#10664#10700#0#HTML" expanded="true" />
+            <element signature="e#10644#10680#0#HTML" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/jobs/view.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1120">
+          <caret line="86" selection-start-line="86" selection-end-line="86" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/JobsController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="51" column="26" lean-forward="true" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
+        <state relative-caret-position="3645">
+          <caret line="249" lean-forward="true" selection-start-line="249" selection-end-line="249" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/jobs/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="77" column="26" selection-start-line="77" selection-start-column="26" selection-end-line="77" selection-end-column="26" />
         </state>
       </provider>
     </entry>

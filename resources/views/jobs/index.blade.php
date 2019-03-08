@@ -75,26 +75,28 @@
 
     <?php //var_dump($filters); ?>
 
-    <form method="post">
-        @csrf
-        <div class="row" <?php echo ( empty($filters['make']) && empty($filters['model']) && empty($filters['year']) ) ? 'style="display:none"' : ""; ?> >
-            <div class="col-md-4 col-sm-6 col-xs-12 form-group">
-                <input type="submit" class="btn btn-outline-danger form-control" id="btn_remove_filters" value="Remove Filter">
-            </div>
-        </div>
-    </form>
+    <div class="container ">
 
-            {{-- IF - ONLY SHOW MAKE SELECTOR IF THERE IS NO MAKE FILTER--}}
-            @if( empty( $filters["make"] ) )
-                <form method="post" id="form_make_filter">
-                    @csrf
-                    <div class="row">
-                        <div class="col-lg-12 text-justify">
-                            <h4>
-                                Select Make:
-                            </h4>
-                        </div>
+        <form method="post">
+            @csrf
+            <div class="row" <?php echo ( empty($filters['make']) && empty($filters['model']) && empty($filters['year']) ) ? 'style="display:none"' : ""; ?> >
+                <div class="col-md-4 col-sm-6 col-xs-12 form-group">
+                    <input type="submit" class="btn btn-outline-danger form-control" id="btn_remove_filters" value="Remove Filter">
+                </div>
+            </div>
+        </form>
+
+        {{-- IF - ONLY SHOW MAKE SELECTOR IF THERE IS NO MAKE FILTER--}}
+        @if( empty( $filters["make"] ) )
+            <form method="post" id="form_make_filter">
+                @csrf
+                <div class="row">
+                    <div class="col-lg-12 text-justify">
+                        <h4>
+                            Select Make:
+                        </h4>
                     </div>
+                </div>
                 <div class="row ">
                     <div class="col-lg-12">
                         <select class="form-control jobs_select" id="make_filter_select" name="make_filter" >
@@ -105,53 +107,53 @@
                         </select>
                     </div>
                 </div>
-                </form>
+            </form>
             {{--ELSE - THERE IS A MAKE FILTER SELECTED - SHOW OTHER FILTER SELECTIONS    --}}
-            @else
-                <form method="post" id="form_other_filters">
-                    @csrf
-                    <div id="model_div" <?php echo !empty( $filters["model"] ) ? 'style="display:none"' : "" ; ?> >
-                        <div class="row">
-                            <div class="col-lg-12 text-justify">
-                                <h4>
-                                    Select Model:
-                                </h4>
-                            </div>
+        @else
+            <form method="post" id="form_other_filters">
+                @csrf
+                <div id="model_div" <?php echo !empty( $filters["model"] ) ? 'style="display:none"' : "" ; ?> >
+                    <div class="row">
+                        <div class="col-lg-12 text-justify">
+                            <h4>
+                                Select Model:
+                            </h4>
                         </div>
-                        <div class="row">
-                            @foreach($boat_models as $model)
-                                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4 form-group ">
+                    </div>
+                    <div class="row">
+                        @foreach($boat_models as $model)
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4 form-group ">
                                 <span class="force_same_line">
                                     <label for="boat_make_{{$model}}">{{$model}}</label>
                                     <input id="boat_make_{{$model}}" class="filter_checkbox" type="checkbox"
                                            name="model_filter[]" value="{{$model}}"
                                     <?php echo in_array($model, $filters['model']) ? 'checked="checked"' : ""; ?> >
                                 </span>
-                                </div>
-                            @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div id="year_div" <?php echo ( !empty( $filters["year"] ) || empty( $filters["model"] ) ) ? 'style="display:none"' : "" ; ?> >
+                    <div class="row">
+                        <div class="col-lg-12 text-justify">
+                            <h4>
+                                Select Year:
+                            </h4>
                         </div>
                     </div>
-
-                    <div id="year_div" <?php echo ( !empty( $filters["year"] ) || empty( $filters["model"] ) ) ? 'style="display:none"' : "" ; ?> >
-                        <div class="row">
-                            <div class="col-lg-12 text-justify">
-                                <h4>
-                                    Select Year:
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            @foreach($boat_years as $year)
-                                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4 form-group ">
+                    <div class="row">
+                        @foreach($boat_years as $year)
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4 form-group ">
                                 <span class="force_same_line">
                                     <label for="boat_year_{{$year}}">{{$year}}</label>
                                     <input id="boat_year_{{$year}}" class="filter_checkbox" type="checkbox" name="year_filter[]" value="{{$year}}"
                                            <?php echo in_array($year, $filters['year']) ? 'checked="checked"' : ""; ?> >
                                 </span>
-                                </div>
-                            @endforeach
-                        </div>
+                            </div>
+                        @endforeach
                     </div>
+                </div>
 
                 <div class="row " <?php echo ( empty( $filters["year"] ) || empty( $filters["model"] ) ) ? "" : 'style="display:none"'; ?>>
                     <div class="col-sm-4 col-xs-6 form-group ">
@@ -159,15 +161,15 @@
                         <input type="hidden" name = "make_filter" value="{{$filters["make"][0]}}">
                     </div>
                 </div>
-                </form>
-            @endif
-    <div class="row">
-        <div class="col-sm-12">
-            <hr>
+            </form>
+        @endif
+        <div class="row">
+            <div class="col-sm-12">
+                <hr>
+            </div>
         </div>
-    </div>
-    {{--WHAT ARE WE SHOWING?--}}
-    <div class="row">
+        {{--WHAT ARE WE SHOWING?--}}
+        <div class="row">
             <?php
             $b_first_model = $b_first_year = true;
             if( !empty( $filters["make"] ) ){
@@ -203,8 +205,10 @@
                 echo '<div class="col-sm-4 col-xs-12 text-justify">';
                 echo "<h4>Show All:</h4></div>";
             } ?>
+        </div>
+        {{--END - WHAT ARE WE SHOWING--}}
     </div>
-    {{--END - WHAT ARE WE SHOWING--}}
+
 
 <?php $jobs_count = 0 ?>
     @foreach($jobs as $job)
