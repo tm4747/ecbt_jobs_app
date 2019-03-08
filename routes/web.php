@@ -12,6 +12,7 @@ Route::post('/view/{id}', 'JobsController@view');
 /*** EDIT JOBS ***/
 Route::post('/edit/{id}', 'JobsController@edit');
 Route::patch('/edit/{id}', 'JobsController@update');
+Route::delete('/edit/{id}', 'JobsController@delete_image');
 
 
 

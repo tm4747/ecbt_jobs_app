@@ -212,14 +212,22 @@
                     <input type="submit" class="btn btn-primary form-control" id="btn_upload_images" value="Upload Images">
                 </div>
             </div>
+        </form>
+
             <div class="row div_job_name_img">
                 @foreach($job_info['images'] as $image)
                     <div class="col-sm-4 div_job_info">
-                        <img src="{{ URL::to( '/images/'. $image['path'] )}}" width="200px">
+                        <img src="{{ URL::to( '/images/'. $image['path'] )}}" width="200px"><br>
+                        <form method="post">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="delete_image" value="{{$image['id']}}">
+                            <input type="hidden" name="job_id" value="{{$job_info['id']}}">
+                            <input type="submit" class="btn btn-danger form-input delete_image_button" value="delete" style="width:200px;margin-top:10px;">
+                        </form>
                     </div>
                 @endforeach
             </div>
-        </form>
 
     </div>
 
@@ -239,9 +247,19 @@
         }
     });
 
+
+
     $( "#this_date_installed" ).datepicker({ dateFormat: 'yy-mm-dd' });
 
     $(document).ready(function(){
+
+        // on click - delete image
+        $('.delete_image_button').on('click', function(e){
+
+            if( ! confirm('are you sure you want to delete this image?')){
+                e.preventDefault();
+            }
+        });
 
         // on change - make select
         $('#this_make').on('change', function(){

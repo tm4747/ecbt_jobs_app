@@ -44,29 +44,8 @@ class JobsController extends Controller
         return view('jobs.edit', compact('job_info', 'a_all_thruster_types', 'a_all_makes', 'a_all_models'));
     }
 
-    protected function get_all_makes(){
-        $a_all_makes = array();
-        $makes_data = DB::table('boat_makes')->get();
-        foreach($makes_data as $data){
-            $a_all_makes[] = $data->name;
-        }
-        sort($a_all_makes);
-        return $a_all_makes;
-    }
 
-    protected function get_empty_job_info(){
-        return array(
-            'id' => "",
-            'make' => "",
-            'year' => "",
-            'model'=> "",
-            'thruster_type' => "",
-            'thruster_info' => "",
-            'wiring_info' => "",
-            'done_on' => "",
-            'images' => array()
-        );
-    }
+
 
 
     public function store( Request $request){
@@ -95,6 +74,60 @@ class JobsController extends Controller
         return view('jobs.edit', compact('job_info', 'a_all_thruster_types', 'a_all_models', 'a_all_makes'));
     }
 
+    public function delete_image($id, Request $request){
+        // get image id from request
+        $image_id_to_destroy = !empty($request['delete_image']) ? $request['delete_image'] : "";
+        // if we have image_id, destroy image
+        if(!empty($image_id_to_destroy)){
+            $image_to_delete = DB::table('images')->where('id', $image_id_to_destroy)->where('job_info_id', $id)->first();
+            $image_path = $image_to_delete->image_path;
+            $deleted_image = new \App\DeletedImage();
+            $deleted_image->image_path = $image_path;
+            $deleted_image->job_info_id = $id;
+            $deleted_image->save();
+            DB::table('images')->where('id', $image_id_to_destroy)->where('job_info_id', $id)->delete();
+        }
+        $job_info = $this->get_this_job_info($id);
+
+        $a_all_makes = $this->get_all_makes();
+        $a_all_models = $this->get_all_models_per_make( $job_info['make_id'] );
+        $a_all_thruster_types = $this->get_all_thruster_types();
+
+        return view('jobs.edit', compact('job_info', 'a_all_thruster_types', 'a_all_makes', 'a_all_models'));
+    }
+
+
+
+
+
+
+    protected function get_all_makes(){
+        $a_all_makes = array();
+        $makes_data = DB::table('boat_makes')->get();
+        foreach($makes_data as $data){
+            $a_all_makes[] = $data->name;
+        }
+        sort($a_all_makes);
+        return $a_all_makes;
+    }
+
+    protected function get_empty_job_info(){
+        return array(
+            'id' => "",
+            'make' => "",
+            'year' => "",
+            'model'=> "",
+            'thruster_type' => "",
+            'thruster_info' => "",
+            'wiring_info' => "",
+            'done_on' => "",
+            'images' => array()
+        );
+    }
+
+
+
+
     protected function get_all_models_per_make( $make_id ){
         $a_models = array();
         $models_data = DB::table('boat_models')->where('make_id', $make_id)->get();
@@ -112,7 +145,7 @@ class JobsController extends Controller
         if($request->hasfile('filenames')){
 
             foreach($request->file('filenames') as $image) {
-                $this->pre_var_dump($image);
+//                $this->pre_var_dump($image);
                 $name=$image->getClientOriginalName();
                 $image->move(public_path().'/images/' . $id, $name);
                 $new_image = new \App\Image();
